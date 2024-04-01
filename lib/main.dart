@@ -14,9 +14,9 @@ class Greengrocer extends StatelessWidget {
     return MaterialApp(
       title: 'Greengrocer',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        useMaterial3: true,
-      ),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+          useMaterial3: true,
+          scaffoldBackgroundColor: Colors.white.withAlpha(190)),
       debugShowCheckedModeBanner: false,
       home: const SignInScreen(),
     );
