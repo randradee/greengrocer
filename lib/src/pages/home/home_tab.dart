@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:greengrocer/src/config/custom_colors.dart';
 import 'package:greengrocer/src/pages/home/components/category_tile.dart';
 import 'package:greengrocer/src/config/app_data.dart' as app_data;
+import 'package:greengrocer/src/pages/home/components/item_tile.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -79,6 +81,7 @@ class _HomeTabState extends State<HomeTab> {
               ),
             ),
           ),
+
           // Filtro de categorias
           Container(
             padding: const EdgeInsets.only(left: 25),
@@ -96,6 +99,26 @@ class _HomeTabState extends State<HomeTab> {
               ),
               separatorBuilder: (_, index) => const SizedBox(width: 10),
               itemCount: app_data.categories.length,
+            ),
+          ),
+
+          // Grid
+          Expanded(
+            child: GridView.builder(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              physics: const BouncingScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                childAspectRatio: 9 / 11.5,
+              ),
+              itemCount: app_data.items.length,
+              itemBuilder: (_, index) {
+                return ItemTile(
+                  item: app_data.items[index],
+                );
+              },
             ),
           )
         ],
