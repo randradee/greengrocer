@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:greengrocer/src/config/custom_colors.dart';
 import 'package:greengrocer/src/models/item_model.dart';
+import 'package:greengrocer/src/pages/shared/quantity_widget.dart';
 import 'package:greengrocer/src/services/utils_services.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -16,6 +17,8 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
+  int cartItemQuantity = 1;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -73,10 +76,14 @@ class _ProductScreenState extends State<ProductScreen> {
                             ),
 
                             // Widget de quantidade
-                            Container(
-                              height: 30,
-                              width: 70,
-                              color: Colors.red,
+                            QuantityWidget(
+                              unitLabel: widget.item.unit,
+                              value: cartItemQuantity,
+                              result: (quantity) {
+                                setState(() {
+                                  cartItemQuantity = quantity;
+                                });
+                              },
                             )
                           ],
                         ),
