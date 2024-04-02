@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:greengrocer/src/config/custom_colors.dart';
-import 'package:greengrocer/src/home/components/category_tile.dart';
+import 'package:greengrocer/src/pages/home/components/category_tile.dart';
+import 'package:greengrocer/src/config/app_data.dart' as app_data;
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -10,15 +11,6 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  final List<String> categories = [
-    'Frutas',
-    'Verduras',
-    'Legumes',
-    'Carnes',
-    'Cereais',
-    'Laticínios'
-  ];
-
   String selectedCategory = 'Frutas';
 
   @override
@@ -96,14 +88,14 @@ class _HomeTabState extends State<HomeTab> {
               itemBuilder: (_, index) => CategoryTile(
                 onPressed: () {
                   setState(() {
-                    selectedCategory = categories[index];
+                    selectedCategory = app_data.categories[index];
                   });
                 },
-                category: categories[index],
-                isSelected: categories[index] == selectedCategory,
+                category: app_data.categories[index],
+                isSelected: app_data.categories[index] == selectedCategory,
               ),
               separatorBuilder: (_, index) => const SizedBox(width: 10),
-              itemCount: categories.length,
+              itemCount: app_data.categories.length,
             ),
           )
         ],
