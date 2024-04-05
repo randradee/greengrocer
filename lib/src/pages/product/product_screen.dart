@@ -115,7 +115,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           ),
                         ),
 
-                        // Botão
+                        // Botão Adicionar ao carrinho
                         SizedBox(
                           height: 55,
                           child: ElevatedButton.icon(
