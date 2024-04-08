@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:greengrocer/src/pages/shared/custom_text_field.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:greengrocer/src/config/app_data.dart' as app_data;
@@ -32,6 +30,8 @@ class _UserTabState extends State<UserTab> {
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.green,
+        shadowColor: Colors.black,
+        elevation: 10,
         actions: [
           IconButton(
             onPressed: () {
@@ -87,7 +87,7 @@ class _UserTabState extends State<UserTab> {
                 height: 50,
                 child: OutlinedButton(
                     onPressed: () async {
-                      bool? result = await updatePassword();
+                      await updatePassword();
                     },
                     style: OutlinedButton.styleFrom(
                       shape: RoundedRectangleBorder(
