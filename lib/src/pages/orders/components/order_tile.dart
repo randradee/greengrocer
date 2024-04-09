@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:greengrocer/src/config/custom_colors.dart';
 import 'package:greengrocer/src/models/cart_item_model.dart';
 import 'package:greengrocer/src/models/order_model.dart';
 import 'package:greengrocer/src/pages/orders/components/order_status_widget.dart';
+import 'package:greengrocer/src/pages/shared/payment_dialog.dart';
 import 'package:greengrocer/src/services/utils_services.dart';
 
 class OrderTile extends StatelessWidget {
@@ -22,6 +25,7 @@ class OrderTile extends StatelessWidget {
         child: Theme(
           data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
           child: ExpansionTile(
+            initiallyExpanded: order.status == 'pending_payment',
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -78,6 +82,58 @@ class OrderTile extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Total
+                  Text.rich(
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(fontSize: 20),
+                    TextSpan(children: [
+                      const TextSpan(
+                        text: 'Total: ',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(
+                        text: utilsServices.priceToCurrency(order.total),
+                      ),
+                    ]),
+                  ),
+
+                  // Botão pagamento
+                  Visibility(
+                    visible: order.status == 'pending_payment',
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        backgroundColor: CustomColors.customSwatchColor,
+                      ),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) {
+                            return PaymentDialog(
+                              order: order,
+                            );
+                          },
+                        );
+                      },
+                      label: const Text(
+                        'Ver QR Code Pix',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      icon: Image.asset(
+                        'assets/icons/pix.png',
+                        height: 18,
+                      ),
+                    ),
+                  ),
+                ],
               )
             ],
           ),
