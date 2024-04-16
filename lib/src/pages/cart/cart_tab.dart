@@ -19,6 +19,7 @@ class _CartTabState extends State<CartTab> {
   void removeItemFromCart(CartItemModel cartItem) {
     setState(() {
       app_data.cartItems.remove(cartItem);
+      utilsServices.showToast(msg: 'Item removido');
     });
   }
 
