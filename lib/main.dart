@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:greengrocer/src/pages/splash/splash_screen.dart';
+import 'package:get/get.dart';
+import 'package:greengrocer/src/routes/app_routes.dart';
 
 void main() {
   runApp(const Greengrocer());
@@ -11,14 +12,15 @@ class Greengrocer extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Greengrocer',
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
           useMaterial3: true,
           scaffoldBackgroundColor: Colors.white.withAlpha(190)),
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+      getPages: AppRoutes.pages,
+      initialRoute: PagesRoutes.splashRoute,
     );
   }
 }

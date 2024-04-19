@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:greengrocer/src/pages/shared/custom_text_field.dart';
 import 'package:greengrocer/src/config/custom_colors.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -35,7 +36,7 @@ class SignUpScreen extends StatelessWidget {
                   child: SafeArea(
                     child: IconButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          Get.back();
                         },
                         icon: const Icon(
                             color: Colors.white, Icons.arrow_back_rounded)),
