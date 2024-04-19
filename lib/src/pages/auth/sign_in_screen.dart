@@ -7,7 +7,9 @@ import 'package:greengrocer/src/config/custom_colors.dart';
 import 'package:greengrocer/src/routes/app_routes.dart';
 
 class SignInScreen extends StatelessWidget {
-  const SignInScreen({super.key});
+  SignInScreen({super.key});
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -64,97 +66,125 @@ class SignInScreen extends StatelessWidget {
                       color: Colors.white,
                       borderRadius:
                           BorderRadius.vertical(top: Radius.circular(45))),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      // Email
-                      const CustomTextField(
-                        icon: Icons.email,
-                        text: 'Email',
-                      ),
-                      // Senha
-                      const CustomTextField(
-                        icon: Icons.lock,
-                        text: 'Senha',
-                        isSecret: true,
-                      ),
-                      // Botão entrar
-                      SizedBox(
-                        height: 50,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              Get.offNamed(PagesRoutes.baseRoute);
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: CustomColors.customSwatchColor,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18))),
-                            child: const Text(
-                              'Entrar',
-                              style:
-                                  TextStyle(fontSize: 18, color: Colors.white),
-                            )),
-                      ),
-                      // Esqueceu a senha?
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'Esqueceu a senha?',
-                              style: TextStyle(
-                                  color: CustomColors.customContrastColor),
-                            )),
-                      ),
-                      // Divisor
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Divider(
-                                color: Colors.grey.withAlpha(90),
-                                thickness: 2,
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 5),
-                              child: Text(
-                                'Ou',
-                                style:
-                                    TextStyle(color: Colors.grey.withAlpha(90)),
-                              ),
-                            ),
-                            Expanded(
-                              child: Divider(
-                                color: Colors.grey.withAlpha(90),
-                                thickness: 2,
-                              ),
-                            ),
-                          ],
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        // Email
+                        CustomTextField(
+                          icon: Icons.email,
+                          text: 'Email',
+                          validator: (email) {
+                            if (email == null || email.isEmpty) {
+                              return 'Email é obrigatório';
+                            }
+                            if (!email.isEmail) {
+                              return 'Digite um email válido';
+                            }
+                            return null;
+                          },
                         ),
-                      ),
-                      // Botão criar conta
-                      SizedBox(
+                        // Senha
+                        CustomTextField(
+                          icon: Icons.lock,
+                          text: 'Senha',
+                          isSecret: true,
+                          validator: (password) {
+                            if (password == null || password.isEmpty) {
+                              return 'Senha é obrigatória';
+                            }
+                            if (password.length < 8) {
+                              return 'A senha deve conter ao menos 8 caracteres.';
+                            }
+                            return null;
+                          },
+                        ),
+                        // Botão entrar
+                        SizedBox(
                           height: 50,
-                          child: OutlinedButton(
+                          child: ElevatedButton(
                               onPressed: () {
-                                Get.toNamed(PagesRoutes.signUpRoute);
+                                if (_formKey.currentState!.validate()) {
+                                  print('campos válidos');
+                                  // Get.offNamed(PagesRoutes.baseRoute);
+                                } else {
+                                  print('campos não válidos');
+                                }
                               },
-                              style: OutlinedButton.styleFrom(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      CustomColors.customSwatchColor,
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18)),
-                                  side: BorderSide(
-                                      width: 2,
-                                      color: CustomColors.customSwatchColor)),
-                              child: Text(
-                                'Criar conta',
+                                      borderRadius: BorderRadius.circular(18))),
+                              child: const Text(
+                                'Entrar',
                                 style: TextStyle(
-                                    color: CustomColors.customSwatchColor,
-                                    fontSize: 18),
-                              )))
-                    ],
+                                    fontSize: 18, color: Colors.white),
+                              )),
+                        ),
+                        // Esqueceu a senha?
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                'Esqueceu a senha?',
+                                style: TextStyle(
+                                    color: CustomColors.customContrastColor),
+                              )),
+                        ),
+                        // Divisor
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Divider(
+                                  color: Colors.grey.withAlpha(90),
+                                  thickness: 2,
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: Text(
+                                  'Ou',
+                                  style: TextStyle(
+                                      color: Colors.grey.withAlpha(90)),
+                                ),
+                              ),
+                              Expanded(
+                                child: Divider(
+                                  color: Colors.grey.withAlpha(90),
+                                  thickness: 2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Botão criar conta
+                        SizedBox(
+                            height: 50,
+                            child: OutlinedButton(
+                                onPressed: () {
+                                  Get.toNamed(PagesRoutes.signUpRoute);
+                                },
+                                style: OutlinedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18)),
+                                    side: BorderSide(
+                                        width: 2,
+                                        color: CustomColors.customSwatchColor)),
+                                child: Text(
+                                  'Criar conta',
+                                  style: TextStyle(
+                                      color: CustomColors.customSwatchColor,
+                                      fontSize: 18),
+                                )))
+                      ],
+                    ),
                   ),
                 )
               ],
