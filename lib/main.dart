@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:greengrocer/src/routes/app_routes.dart';
+import 'package:greengrocer/src/pages/auth/controllers/auth_controller.dart';
 
 void main() {
+  Get.put<AuthController>(AuthController());
   runApp(const Greengrocer());
 }
 

@@ -9,17 +9,18 @@ class CustomTextField extends StatefulWidget {
   final String? initialValue;
   final bool isReadonly;
   final String? Function(String?)? validator;
+  final TextEditingController? controller;
 
-  const CustomTextField({
-    super.key,
-    required this.text,
-    required this.icon,
-    this.isSecret = false,
-    this.inputFormatters,
-    this.initialValue,
-    this.isReadonly = false,
-    this.validator,
-  });
+  const CustomTextField(
+      {super.key,
+      required this.text,
+      required this.icon,
+      this.isSecret = false,
+      this.inputFormatters,
+      this.initialValue,
+      this.isReadonly = false,
+      this.validator,
+      this.controller});
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -44,6 +45,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         readOnly: widget.isReadonly,
         initialValue: widget.initialValue,
         validator: widget.validator,
+        controller: widget.controller,
         decoration: InputDecoration(
             isDense: true,
             prefixIcon: Icon(widget.icon),

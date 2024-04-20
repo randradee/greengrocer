@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:greengrocer/src/pages/auth/controllers/auth_controller.dart';
 import 'package:greengrocer/src/pages/shared/app_name_widget.dart';
 import 'package:greengrocer/src/pages/shared/custom_text_field.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -10,6 +11,9 @@ class SignInScreen extends StatelessWidget {
   SignInScreen({super.key});
 
   final _formKey = GlobalKey<FormState>();
+
+  final loginController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +78,7 @@ class SignInScreen extends StatelessWidget {
                         // Email
                         CustomTextField(
                           icon: Icons.email,
+                          controller: loginController,
                           text: 'Email',
                           validator: (email) {
                             if (email == null || email.isEmpty) {
@@ -88,6 +93,7 @@ class SignInScreen extends StatelessWidget {
                         // Senha
                         CustomTextField(
                           icon: Icons.lock,
+                          controller: passwordController,
                           text: 'Senha',
                           isSecret: true,
                           validator: (password) {
@@ -101,38 +107,91 @@ class SignInScreen extends StatelessWidget {
                           },
                         ),
                         // Botão entrar
-                        SizedBox(
-                          height: 50,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  print('campos válidos');
-                                  // Get.offNamed(PagesRoutes.baseRoute);
-                                } else {
-                                  print('campos não válidos');
-                                }
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            SizedBox(
+                              height: 50,
+                              child: GetX<AuthController>(
+                                builder: (authController) {
+                                  return ElevatedButton(
+                                    onPressed: authController.isLoading.value
+                                        ? null
+                                        : () async {
+                                            FocusScope.of(context).unfocus();
+
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              String email =
+                                                  loginController.text;
+                                              String password =
+                                                  passwordController.text;
+
+                                              await authController.signIn(
+                                                email: email,
+                                                password: password,
+                                              );
+                                              if (authController
+                                                  .shouldLogin.value) {
+                                                Get.offNamed(
+                                                    PagesRoutes.baseRoute);
+                                              }
+                                            } else {
+                                              return;
+                                            }
+                                          },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          CustomColors.customSwatchColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(18),
+                                      ),
+                                    ),
+                                    child: authController.isLoading.value
+                                        ? CircularProgressIndicator(
+                                            color:
+                                                CustomColors.customSwatchColor,
+                                          )
+                                        : const Text(
+                                            'Entrar',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.white),
+                                          ),
+                                  );
+                                },
+                              ),
+                            ),
+                            // Texto de login ou senha inválido
+                            GetX<AuthController>(
+                              builder: (authController) {
+                                return authController.wrongEmailOrPassword.value
+                                    ? Text(
+                                        'Login ou senha inválido(s)',
+                                        style: TextStyle(
+                                          color:
+                                              CustomColors.customContrastColor,
+                                          fontSize: 12,
+                                        ),
+                                      )
+                                    : const SizedBox(
+                                        height: 0,
+                                      );
                               },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      CustomColors.customSwatchColor,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18))),
-                              child: const Text(
-                                'Entrar',
-                                style: TextStyle(
-                                    fontSize: 18, color: Colors.white),
-                              )),
+                            ),
+                          ],
                         ),
                         // Esqueceu a senha?
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Esqueceu a senha?',
-                                style: TextStyle(
-                                    color: CustomColors.customContrastColor),
-                              )),
+                            onPressed: () {},
+                            child: Text(
+                              'Esqueceu a senha?',
+                              style: TextStyle(
+                                  color: CustomColors.customContrastColor),
+                            ),
+                          ),
                         ),
                         // Divisor
                         Padding(
