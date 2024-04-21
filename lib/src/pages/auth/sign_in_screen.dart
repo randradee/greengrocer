@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:greengrocer/src/pages/auth/controllers/auth_controller.dart';
+import 'package:greengrocer/src/controllers/auth_controller.dart';
 import 'package:greengrocer/src/pages/shared/app_name_widget.dart';
 import 'package:greengrocer/src/pages/shared/custom_text_field.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:greengrocer/src/routes/app_routes.dart';
-import 'package:greengrocer/src/pages/auth/controllers/auth_controller.dart';
+import 'package:greengrocer/src/controllers/auth_controller.dart';
 
 void main() {
   Get.put<AuthController>(AuthController());
@@ -17,9 +17,10 @@ class Greengrocer extends StatelessWidget {
     return GetMaterialApp(
       title: 'Greengrocer',
       theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-          useMaterial3: true,
-          scaffoldBackgroundColor: Colors.white.withAlpha(190)),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        useMaterial3: true,
+        scaffoldBackgroundColor: Colors.white.withAlpha(190),
+      ),
       debugShowCheckedModeBanner: false,
       getPages: AppRoutes.pages,
       initialRoute: PagesRoutes.splashRoute,
