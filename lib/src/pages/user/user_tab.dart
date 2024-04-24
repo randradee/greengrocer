@@ -63,13 +63,13 @@ class _UserTabState extends State<UserTab> {
             CustomTextField(
               text: 'Nome',
               icon: Icons.person,
-              initialValue: app_data.user.nome,
+              initialValue: app_data.user.name,
               isReadonly: true,
             ),
             CustomTextField(
               text: 'Celular',
               icon: Icons.phone,
-              initialValue: app_data.user.celular,
+              initialValue: app_data.user.phone,
               inputFormatters: [phoneFormatter],
               isReadonly: true,
             ),

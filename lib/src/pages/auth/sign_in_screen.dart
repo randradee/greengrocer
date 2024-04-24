@@ -167,7 +167,7 @@ class SignInScreen extends StatelessWidget {
                               builder: (authController) {
                                 return authController.wrongEmailOrPassword.value
                                     ? Text(
-                                        'Login ou senha inválido(s)',
+                                        authController.errorMessage.value,
                                         style: TextStyle(
                                           color:
                                               CustomColors.customContrastColor,

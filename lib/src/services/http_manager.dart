@@ -18,8 +18,8 @@ class HttpManager {
     final defaultHeaders = headers?.cast<String, String>() ?? {}
       ..addAll({
         "Content-Type": "application/json",
-        "X-Parse-Application-Id": "g1Oui3JqxnY4S1ykpQWHwEKGOe0dRYCPvPF4iykc",
-        "X-Parse-REST-API-Key": "rFBKU8tk0m5ZlKES2CGieOaoYz6TgKxVMv8jRIsN",
+        "X-Parse-Application-Id": "wK7GcEjr2V4br5q5mlR1kybQ5dvxMFDX0qtE1d6Y",
+        "X-Parse-REST-API-Key": "2kahi62fkWePLWAwC7k8aMrtQkobogcgkruMxbeB",
       });
 
     var dio = Dio();
