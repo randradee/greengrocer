@@ -8,7 +8,7 @@ abstract class AppRoutes {
   static final pages = <GetPage>[
     GetPage(name: '/splash', page: () => const SplashScreen()),
     GetPage(name: '/signin', page: () => SignInScreen()),
-    GetPage(name: '/signup', page: () => const SignUpScreen()),
+    GetPage(name: '/signup', page: () => SignUpScreen()),
     GetPage(name: '/', page: () => const BaseScreen()),
   ];
 }

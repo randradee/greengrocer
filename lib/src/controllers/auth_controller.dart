@@ -39,7 +39,21 @@ class AuthController extends GetxController {
     );
   }
 
-  Future<void> signUp({required UserModel user}) async {
+  Future<void> signUp({
+    required String email,
+    required String password,
+    required String name,
+    required String phone,
+    required String cpf,
+  }) async {
+    var user = UserModel(
+      email: email,
+      password: password,
+      name: name,
+      phone: phone,
+      cpf: cpf,
+    );
+
     AuthResult result = await _authRepository.signUp(user: user);
 
     result.when(

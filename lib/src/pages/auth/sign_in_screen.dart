@@ -101,7 +101,7 @@ class SignInScreen extends StatelessWidget {
                               return 'Senha é obrigatória';
                             }
                             if (password.length < 8) {
-                              return 'A senha deve conter ao menos 8 caracteres.';
+                              return 'A senha deve conter ao menos 8 caracteres';
                             }
                             return null;
                           },
