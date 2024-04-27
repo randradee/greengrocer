@@ -21,10 +21,10 @@ class _BaseScreenState extends State<BaseScreen> {
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
-        children: const [
-          HomeTab(),
-          CartTab(),
-          OrdersTab(),
+        children: [
+          const HomeTab(),
+          const CartTab(),
+          const OrdersTab(),
           UserTab(),
         ],
       ),

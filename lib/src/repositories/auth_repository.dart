@@ -40,4 +40,20 @@ class AuthRepository {
 
     return AuthResult.success(UserModel.fromJson(result['result']));
   }
+
+  Future<AuthResult> validateToken({required String token}) async {
+    final result = await _httpManager.restRequest(
+      url: Endpoints.validateToken,
+      method: HttpMethods.post,
+      headers: {
+        "X-Parse-Session-Token": token,
+      },
+    );
+
+    if (result['result'] == null) {
+      return AuthResult.error(Errors().authErrorsString(result['error']));
+    }
+
+    return AuthResult.success(UserModel.fromJson(result['result']));
+  }
 }

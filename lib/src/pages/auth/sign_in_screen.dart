@@ -6,9 +6,12 @@ import 'package:greengrocer/src/pages/shared/custom_text_field.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:greengrocer/src/config/custom_colors.dart';
 import 'package:greengrocer/src/routes/app_routes.dart';
+import 'package:greengrocer/src/services/utils_services.dart';
 
 class SignInScreen extends StatelessWidget {
   SignInScreen({super.key});
+
+  final utilsServices = UtilsServices();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -131,11 +134,6 @@ class SignInScreen extends StatelessWidget {
                                                 email: email,
                                                 password: password,
                                               );
-                                              if (authController
-                                                  .shouldLogin.value) {
-                                                Get.offNamed(
-                                                    PagesRoutes.baseRoute);
-                                              }
                                             } else {
                                               return;
                                             }
@@ -161,23 +159,6 @@ class SignInScreen extends StatelessWidget {
                                   );
                                 },
                               ),
-                            ),
-                            // Texto de login ou senha inválido
-                            GetX<AuthController>(
-                              builder: (authController) {
-                                return authController.wrongEmailOrPassword.value
-                                    ? Text(
-                                        authController.errorMessage.value,
-                                        style: TextStyle(
-                                          color:
-                                              CustomColors.customContrastColor,
-                                          fontSize: 12,
-                                        ),
-                                      )
-                                    : const SizedBox(
-                                        height: 0,
-                                      );
-                              },
                             ),
                           ],
                         ),

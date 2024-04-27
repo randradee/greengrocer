@@ -169,16 +169,6 @@ class SignUpScreen extends StatelessWidget {
                                         phone: phone,
                                         cpf: cpf,
                                       );
-
-                                      if (authController.signUpSuccess.value) {
-                                        utilsServices.showToast(
-                                          msg: 'Cadastro realizado com sucesso',
-                                        );
-                                        Future.delayed(
-                                          const Duration(seconds: 2),
-                                        );
-                                        Get.back();
-                                      }
                                     } else {
                                       return;
                                     }

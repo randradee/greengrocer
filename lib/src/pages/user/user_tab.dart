@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:greengrocer/src/controllers/auth_controller.dart';
 import 'package:greengrocer/src/pages/shared/custom_text_field.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:greengrocer/src/config/app_data.dart' as app_data;
 
 class UserTab extends StatefulWidget {
-  const UserTab({super.key});
+  final _authController = AuthController();
+
+  UserTab({super.key});
 
   @override
   State<UserTab> createState() => _UserTabState();
@@ -35,7 +38,7 @@ class _UserTabState extends State<UserTab> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              widget._authController.signOut();
             },
             icon: const Icon(
               Icons.logout,

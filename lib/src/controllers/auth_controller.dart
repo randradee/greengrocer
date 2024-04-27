@@ -1,17 +1,40 @@
 import 'package:get/get.dart';
+import 'package:greengrocer/src/constants/storage_keys.dart';
 import 'package:greengrocer/src/models/user_model.dart';
 import 'package:greengrocer/src/repositories/auth_repository.dart';
 import 'package:greengrocer/src/results/auth_result.dart';
+import 'package:greengrocer/src/routes/app_routes.dart';
+import 'package:greengrocer/src/services/utils_services.dart';
 
 class AuthController extends GetxController {
-  final _authRepository = AuthRepository();
-
   RxBool isLoading = false.obs;
-  RxBool shouldLogin = false.obs;
-  RxBool wrongEmailOrPassword = false.obs;
-  RxBool signUpSuccess = false.obs;
-  RxString token = ''.obs;
-  RxString errorMessage = ''.obs;
+
+  final _authRepository = AuthRepository();
+  final _utilsServices = UtilsServices();
+
+  UserModel user = UserModel();
+
+  Future<void> validateToken() async {
+    String? token = await _utilsServices.getLocalData(key: StorageKeys.token);
+
+    if (token == null) {
+      Get.offAllNamed(PagesRoutes.signInRoute);
+      return;
+    }
+
+    AuthResult result = await _authRepository.validateToken(token: token);
+
+    result.when(
+      success: (user) {
+        this.user = user;
+
+        saveTokenAndProcceedToBase();
+      },
+      error: (message) {
+        signOut();
+      },
+    );
+  }
 
   Future<void> signIn({
     required String email,
@@ -30,13 +53,32 @@ class AuthController extends GetxController {
 
     result.when(
       success: (user) {
-        shouldLogin.value = true;
+        this.user = user;
+
+        saveTokenAndProcceedToBase();
       },
       error: (message) {
-        wrongEmailOrPassword.value = true;
-        errorMessage.value = message;
+        _utilsServices.showToast(msg: message, isError: true);
       },
     );
+  }
+
+  Future<void> saveTokenAndProcceedToBase() async {
+    await _utilsServices.saveLocalData(
+        key: StorageKeys.token, data: user.token!);
+
+    Get.offAllNamed(PagesRoutes.baseRoute);
+  }
+
+  Future<void> signOut() async {
+    // Resetar dados do user
+    user = UserModel();
+
+    // Remover token do storage
+    _utilsServices.deleteLocalData(key: StorageKeys.token);
+
+    // Redirecionar para tela de login
+    Get.offAllNamed(PagesRoutes.signInRoute);
   }
 
   Future<void> signUp({
@@ -58,12 +100,11 @@ class AuthController extends GetxController {
 
     result.when(
       success: (user) {
-        signUpSuccess.value = true;
-        token.value = user.token!;
+        _utilsServices.showToast(msg: 'Cadastro realizado com sucesso');
+        Get.offAllNamed(PagesRoutes.signInRoute);
       },
       error: (message) {
-        wrongEmailOrPassword.value = true;
-        errorMessage.value = message;
+        _utilsServices.showToast(msg: message, isError: true);
       },
     );
   }

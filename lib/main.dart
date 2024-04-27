@@ -4,7 +4,11 @@ import 'package:greengrocer/src/routes/app_routes.dart';
 import 'package:greengrocer/src/controllers/auth_controller.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Injeção de dependência
   Get.put<AuthController>(AuthController());
+
   runApp(const Greengrocer());
 }
 
