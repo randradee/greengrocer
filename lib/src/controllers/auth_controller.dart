@@ -40,10 +40,9 @@ class AuthController extends GetxController {
     required String email,
     required String password,
   }) async {
+    // Loading do botão
     isLoading.value = true;
-
     await Future.delayed(const Duration(seconds: 2));
-
     isLoading.value = false;
 
     AuthResult result = await _authRepository.signIn(
@@ -54,7 +53,6 @@ class AuthController extends GetxController {
     result.when(
       success: (user) {
         this.user = user;
-        print(user);
 
         saveTokenAndProcceedToBase();
       },
@@ -66,7 +64,9 @@ class AuthController extends GetxController {
 
   Future<void> saveTokenAndProcceedToBase() async {
     await _utilsServices.saveLocalData(
-        key: StorageKeys.token, data: user.token!);
+      key: StorageKeys.token,
+      data: user.token!,
+    );
 
     Get.offAllNamed(PagesRoutes.baseRoute);
   }
@@ -96,6 +96,11 @@ class AuthController extends GetxController {
       phone: phone,
       cpf: cpf,
     );
+
+    // Loading do botão
+    isLoading.value = true;
+    Future.delayed(const Duration(seconds: 2));
+    isLoading.value = false;
 
     AuthResult result = await _authRepository.signUp(user: user);
 

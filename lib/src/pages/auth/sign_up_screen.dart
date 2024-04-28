@@ -12,7 +12,6 @@ class SignUpScreen extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
 
-  final authController = AuthController();
   final utilsServices = UtilsServices();
 
   final emailController = TextEditingController();
@@ -90,8 +89,8 @@ class SignUpScreen extends StatelessWidget {
                                 text: 'Email',
                                 controller: emailController,
                                 textInputType: TextInputType.emailAddress,
-                                icon: Icons.email,
                                 validator: emailValidator,
+                                icon: Icons.email,
                               ),
                               CustomTextField(
                                 text: 'Senha',
@@ -125,43 +124,55 @@ class SignUpScreen extends StatelessWidget {
                               ),
                               SizedBox(
                                 height: 50,
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    FocusScope.of(context).unfocus();
+                                child: GetX<AuthController>(
+                                  builder: (authController) {
+                                    return !authController.isLoading.value
+                                        ? ElevatedButton(
+                                            onPressed: () async {
+                                              FocusScope.of(context).unfocus();
 
-                                    if (_formKey.currentState!.validate()) {
-                                      String email =
-                                          emailController.text.trim();
-                                      String password =
-                                          passwordController.text.trim();
-                                      String name = nameController.text.trim();
-                                      String phone =
-                                          phoneController.text.trim();
-                                      String cpf = cpfController.text.trim();
+                                              if (_formKey.currentState!
+                                                  .validate()) {
+                                                String email =
+                                                    emailController.text.trim();
+                                                String password =
+                                                    passwordController.text
+                                                        .trim();
+                                                String name =
+                                                    nameController.text.trim();
+                                                String phone =
+                                                    phoneController.text.trim();
+                                                String cpf =
+                                                    cpfController.text.trim();
 
-                                      await authController.signUp(
-                                        email: email,
-                                        password: password,
-                                        name: name,
-                                        phone: phone,
-                                        cpf: cpf,
-                                      );
-                                    } else {
-                                      return;
-                                    }
+                                                await authController.signUp(
+                                                  email: email,
+                                                  password: password,
+                                                  name: name,
+                                                  phone: phone,
+                                                  cpf: cpf,
+                                                );
+                                              } else {
+                                                return;
+                                              }
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: CustomColors
+                                                  .customSwatchColor,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18),
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              'Cadastrar usuário',
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.white),
+                                            ),
+                                          )
+                                        : const CircularProgressIndicator();
                                   },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        CustomColors.customSwatchColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    'Cadastrar usuário',
-                                    style: TextStyle(
-                                        fontSize: 18, color: Colors.white),
-                                  ),
                                 ),
                               ),
                             ],
