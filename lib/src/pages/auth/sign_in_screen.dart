@@ -7,6 +7,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:greengrocer/src/config/custom_colors.dart';
 import 'package:greengrocer/src/routes/app_routes.dart';
 import 'package:greengrocer/src/services/utils_services.dart';
+import 'package:greengrocer/src/services/validators.dart';
 
 class SignInScreen extends StatelessWidget {
   SignInScreen({super.key});
@@ -83,15 +84,7 @@ class SignInScreen extends StatelessWidget {
                           icon: Icons.email,
                           controller: loginController,
                           text: 'Email',
-                          validator: (email) {
-                            if (email == null || email.isEmpty) {
-                              return 'Email é obrigatório';
-                            }
-                            if (!email.isEmail) {
-                              return 'Digite um email válido';
-                            }
-                            return null;
-                          },
+                          validator: emailValidator,
                         ),
                         // Senha
                         CustomTextField(

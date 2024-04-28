@@ -4,6 +4,7 @@ import 'package:greengrocer/src/controllers/auth_controller.dart';
 import 'package:greengrocer/src/pages/shared/custom_text_field.dart';
 import 'package:greengrocer/src/config/custom_colors.dart';
 import 'package:greengrocer/src/services/utils_services.dart';
+import 'package:greengrocer/src/services/validators.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -88,66 +89,37 @@ class SignUpScreen extends StatelessWidget {
                               CustomTextField(
                                 text: 'Email',
                                 controller: emailController,
+                                textInputType: TextInputType.emailAddress,
                                 icon: Icons.email,
-                                validator: (email) {
-                                  if (email == null || email.isEmpty) {
-                                    return 'Email é obrigatório';
-                                  }
-                                  if (!email.isEmail) {
-                                    return 'Digite um email válido';
-                                  }
-                                  return null;
-                                },
+                                validator: emailValidator,
                               ),
                               CustomTextField(
                                 text: 'Senha',
                                 controller: passwordController,
-                                validator: (password) {
-                                  if (password == null || password.isEmpty) {
-                                    return 'Senha é obrigatória';
-                                  }
-                                  if (password.length < 8) {
-                                    return 'A senha deve conter ao menos 8 caracteres';
-                                  }
-                                  return null;
-                                },
+                                validator: passwordValidator,
                                 icon: Icons.lock,
                                 isSecret: true,
                               ),
                               CustomTextField(
                                 text: 'Nome',
                                 controller: nameController,
-                                validator: (name) {
-                                  if (name == null || name.isEmpty) {
-                                    return 'Nome é obrigatório';
-                                  }
-                                  if (!name
-                                      .removeAllWhitespace.isAlphabetOnly) {
-                                    return 'Não é permitido números ou caracteres especiais';
-                                  }
-                                  return null;
-                                },
+                                textInputType: TextInputType.name,
+                                validator: nameValidator,
                                 icon: Icons.person,
                               ),
                               CustomTextField(
                                 inputFormatters: [phoneFormatter],
                                 controller: phoneController,
+                                textInputType: TextInputType.phone,
+                                validator: phoneValidator,
                                 text: 'Celular',
                                 icon: Icons.phone,
                               ),
                               CustomTextField(
                                 inputFormatters: [cpfFormatter],
                                 controller: cpfController,
-                                validator: (cpf) {
-                                  if (cpf == null || cpf.isEmpty) {
-                                    return 'CPF é obrigatório';
-                                  }
-                                  // Removido para testes
-                                  // if (!cpf.isCpf) {
-                                  //   return 'Digite um CPF válido';
-                                  // }
-                                  return null;
-                                },
+                                textInputType: TextInputType.number,
+                                validator: cpfValidator,
                                 text: 'CPF',
                                 icon: Icons.file_copy,
                               ),
