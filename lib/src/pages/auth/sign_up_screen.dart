@@ -121,7 +121,8 @@ class SignUpScreen extends StatelessWidget {
                                   if (name == null || name.isEmpty) {
                                     return 'Nome é obrigatório';
                                   }
-                                  if (!name.isAlphabetOnly) {
+                                  if (!name
+                                      .removeAllWhitespace.isAlphabetOnly) {
                                     return 'Não é permitido números ou caracteres especiais';
                                   }
                                   return null;
@@ -141,9 +142,10 @@ class SignUpScreen extends StatelessWidget {
                                   if (cpf == null || cpf.isEmpty) {
                                     return 'CPF é obrigatório';
                                   }
-                                  if (!cpf.isCpf) {
-                                    return 'Digite um CPF válido';
-                                  }
+                                  // Removido para testes
+                                  // if (!cpf.isCpf) {
+                                  //   return 'Digite um CPF válido';
+                                  // }
                                   return null;
                                 },
                                 text: 'CPF',
@@ -156,11 +158,14 @@ class SignUpScreen extends StatelessWidget {
                                     FocusScope.of(context).unfocus();
 
                                     if (_formKey.currentState!.validate()) {
-                                      String email = emailController.text;
-                                      String password = passwordController.text;
-                                      String name = nameController.text;
-                                      String phone = phoneController.text;
-                                      String cpf = cpfController.text;
+                                      String email =
+                                          emailController.text.trim();
+                                      String password =
+                                          passwordController.text.trim();
+                                      String name = nameController.text.trim();
+                                      String phone =
+                                          phoneController.text.trim();
+                                      String cpf = cpfController.text.trim();
 
                                       await authController.signUp(
                                         email: email,

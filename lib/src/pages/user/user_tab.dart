@@ -2,10 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:greengrocer/src/controllers/auth_controller.dart';
 import 'package:greengrocer/src/pages/shared/custom_text_field.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:greengrocer/src/config/app_data.dart' as app_data;
 
 class UserTab extends StatefulWidget {
   final _authController = AuthController();
+
+  final phoneFormatter = MaskTextInputFormatter(
+    mask: '(##) #####-####',
+    filter: {"#": RegExp(r'[0-9]')},
+    type: MaskAutoCompletionType.lazy,
+  );
+
+  final cpfFormatter = MaskTextInputFormatter(
+    mask: '###.###.###-##',
+    filter: {"#": RegExp(r'[0-9]')},
+    type: MaskAutoCompletionType.lazy,
+  );
 
   UserTab({super.key});
 
@@ -16,16 +27,6 @@ class UserTab extends StatefulWidget {
 class _UserTabState extends State<UserTab> {
   @override
   Widget build(BuildContext context) {
-    final phoneFormatter = MaskTextInputFormatter(
-        mask: '(##) #####-####',
-        filter: {"#": RegExp(r'[0-9]')},
-        type: MaskAutoCompletionType.lazy);
-
-    final cpfFormatter = MaskTextInputFormatter(
-        mask: '###.###.###-##',
-        filter: {"#": RegExp(r'[0-9]')},
-        type: MaskAutoCompletionType.lazy);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -60,28 +61,28 @@ class _UserTabState extends State<UserTab> {
             CustomTextField(
               text: 'Email',
               icon: Icons.mail,
-              initialValue: app_data.user.email,
+              initialValue: widget._authController.user.email,
               isReadonly: true,
             ),
             CustomTextField(
               text: 'Nome',
               icon: Icons.person,
-              initialValue: app_data.user.name,
+              initialValue: widget._authController.user.name,
               isReadonly: true,
             ),
             CustomTextField(
               text: 'Celular',
               icon: Icons.phone,
-              initialValue: app_data.user.phone,
-              inputFormatters: [phoneFormatter],
+              initialValue: widget._authController.user.phone,
+              inputFormatters: [widget.phoneFormatter],
               isReadonly: true,
             ),
             CustomTextField(
               text: 'CPF',
               icon: Icons.file_copy,
               isSecret: true,
-              initialValue: app_data.user.cpf,
-              inputFormatters: [cpfFormatter],
+              initialValue: widget._authController.user.cpf,
+              inputFormatters: [widget.cpfFormatter],
               isReadonly: true,
             ),
 

@@ -54,6 +54,7 @@ class AuthController extends GetxController {
     result.when(
       success: (user) {
         this.user = user;
+        print(user);
 
         saveTokenAndProcceedToBase();
       },
