@@ -97,12 +97,11 @@ class AuthController extends GetxController {
       cpf: cpf,
     );
 
-    // Loading do botão
     isLoading.value = true;
-    Future.delayed(const Duration(seconds: 2));
-    isLoading.value = false;
 
     AuthResult result = await _authRepository.signUp(user: user);
+
+    isLoading.value = false;
 
     result.when(
       success: (user) {
@@ -113,5 +112,29 @@ class AuthController extends GetxController {
         _utilsServices.showToast(msg: message, isError: true);
       },
     );
+  }
+
+  Future<void> updatePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    // Loading do botão
+    isLoading.value = true;
+
+    final result = await _authRepository.updatePassword(
+      token: user.token!,
+      email: user.email!,
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+    );
+
+    isLoading.value = false;
+
+    if (result) {
+      _utilsServices.showToast(msg: 'Senha atualizada com sucesso');
+      signOut();
+    } else {
+      _utilsServices.showToast(msg: 'Senha atual incorreta', isError: true);
+    }
   }
 }
