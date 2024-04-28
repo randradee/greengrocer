@@ -120,7 +120,7 @@ class SignUpScreen extends StatelessWidget {
                                 textInputType: TextInputType.number,
                                 validator: cpfValidator,
                                 text: 'CPF',
-                                icon: Icons.file_copy,
+                                icon: Icons.feed,
                               ),
                               SizedBox(
                                 height: 50,

@@ -87,7 +87,7 @@ class _UserTabState extends State<UserTab> {
             ),
             CustomTextField(
               text: 'CPF',
-              icon: Icons.file_copy,
+              icon: Icons.feed,
               isSecret: true,
               initialValue: authController.user.cpf,
               inputFormatters: [widget.cpfFormatter],
