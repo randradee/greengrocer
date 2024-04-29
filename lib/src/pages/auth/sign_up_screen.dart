@@ -126,9 +126,9 @@ class SignUpScreen extends StatelessWidget {
                                 height: 50,
                                 child: GetX<AuthController>(
                                   builder: (authController) {
-                                    return !authController.isLoading.value
-                                        ? ElevatedButton(
-                                            onPressed: () async {
+                                    return ElevatedButton(
+                                      onPressed: !authController.isLoading.value
+                                          ? () async {
                                               FocusScope.of(context).unfocus();
 
                                               if (_formKey.currentState!
@@ -155,23 +155,25 @@ class SignUpScreen extends StatelessWidget {
                                               } else {
                                                 return;
                                               }
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: CustomColors
-                                                  .customSwatchColor,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(18),
-                                              ),
-                                            ),
-                                            child: const Text(
+                                            }
+                                          : null,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            CustomColors.customSwatchColor,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(18),
+                                        ),
+                                      ),
+                                      child: !authController.isLoading.value
+                                          ? const Text(
                                               'Cadastrar usuário',
                                               style: TextStyle(
                                                   fontSize: 18,
                                                   color: Colors.white),
-                                            ),
-                                          )
-                                        : const CircularProgressIndicator();
+                                            )
+                                          : const CircularProgressIndicator(),
+                                    );
                                   },
                                 ),
                               ),

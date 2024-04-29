@@ -8,6 +8,7 @@ import 'package:greengrocer/src/services/utils_services.dart';
 
 class AuthController extends GetxController {
   RxBool isLoading = false.obs;
+  RxBool isLoadingDialog = false.obs;
 
   final _authRepository = AuthRepository();
   final _utilsServices = UtilsServices();
@@ -135,6 +136,19 @@ class AuthController extends GetxController {
       signOut();
     } else {
       _utilsServices.showToast(msg: 'Senha atual incorreta', isError: true);
+    }
+  }
+
+  Future<void> resetPassword({required String email}) async {
+    isLoadingDialog.value = true;
+    final result = await _authRepository.resetPassword(email: email);
+    isLoadingDialog.value = false;
+
+    if (result) {
+      _utilsServices.showToast(msg: 'Senha reiniciada com sucesso');
+      signOut();
+    } else {
+      _utilsServices.showToast(msg: 'Email incorreto', isError: true);
     }
   }
 }

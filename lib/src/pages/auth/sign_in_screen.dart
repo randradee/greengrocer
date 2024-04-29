@@ -286,21 +286,38 @@ class SignInScreen extends StatelessWidget {
                         // Botão Recuperar
                         SizedBox(
                           height: 45,
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                            child: const Text(
-                              'Recuperar',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                              ),
-                            ),
+                          child: GetX<AuthController>(
+                            builder: (authController) {
+                              return ElevatedButton(
+                                onPressed: !authController.isLoadingDialog.value
+                                    ? () async {
+                                        FocusScope.of(context).unfocus();
+
+                                        if (_dialogFormKey.currentState!
+                                            .validate()) {
+                                          await authController.resetPassword(
+                                              email: passwwordResetController
+                                                  .text);
+                                        }
+                                      }
+                                    : null,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.green,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                ),
+                                child: !authController.isLoadingDialog.value
+                                    ? const Text(
+                                        'Recuperar',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                        ),
+                                      )
+                                    : const CircularProgressIndicator(),
+                              );
+                            },
                           ),
                         ),
                       ],
