@@ -15,9 +15,11 @@ class SignInScreen extends StatelessWidget {
   final utilsServices = UtilsServices();
 
   final _formKey = GlobalKey<FormState>();
+  final _dialogFormKey = GlobalKey<FormState>();
 
   final loginController = TextEditingController();
   final passwordController = TextEditingController();
+  final passwwordResetController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +161,9 @@ class SignInScreen extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              await resetPassword(context);
+                            },
                             child: Text(
                               'Esqueceu a senha?',
                               style: TextStyle(
@@ -225,6 +229,100 @@ class SignInScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Future<bool?> resetPassword(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Stack(
+              children: [
+                Form(
+                  key: _dialogFormKey,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        // Título
+                        const Padding(
+                          padding: EdgeInsets.only(top: 12),
+                          child: Center(
+                            child: Text(
+                              'Recuperação de senha',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        // Texto de hint
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          child: Center(
+                            child: Text(
+                              'Digite o email para recuperar a senha',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                        // Campo de email
+                        CustomTextField(
+                          text: 'Email',
+                          controller: passwwordResetController,
+                          validator: emailValidator,
+                          icon: Icons.email,
+                        ),
+                        // Botão Recuperar
+                        SizedBox(
+                          height: 45,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            child: const Text(
+                              'Recuperar',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 5,
+                  right: 5,
+                  child: IconButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ));
+      },
     );
   }
 }
