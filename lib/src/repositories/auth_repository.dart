@@ -74,15 +74,13 @@ class AuthRepository {
     return result['error'] == null;
   }
 
-  Future resetPassword({required String email}) async {
-    final result = await _httpManager.restRequest(
+  Future<void> resetPassword({required String email}) async {
+    await _httpManager.restRequest(
       url: Endpoints.resetPassword,
       method: HttpMethods.post,
       body: {
         "email": email,
       },
     );
-
-    return result['error'] == null;
   }
 }

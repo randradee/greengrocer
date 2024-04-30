@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:greengrocer/src/controllers/auth_controller.dart';
+import 'package:greengrocer/src/pages/auth/components/forgot_password_dialog.dart';
 import 'package:greengrocer/src/pages/shared/app_name_widget.dart';
 import 'package:greengrocer/src/pages/shared/custom_text_field.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -15,7 +16,6 @@ class SignInScreen extends StatelessWidget {
   final utilsServices = UtilsServices();
 
   final _formKey = GlobalKey<FormState>();
-  final _dialogFormKey = GlobalKey<FormState>();
 
   final loginController = TextEditingController();
   final passwordController = TextEditingController();
@@ -53,17 +53,18 @@ class SignInScreen extends StatelessWidget {
                       child: DefaultTextStyle(
                         style: const TextStyle(fontSize: 25),
                         child: AnimatedTextKit(
-                            isRepeatingAnimation: true,
-                            repeatForever: true,
-                            pause: Duration.zero,
-                            animatedTexts: [
-                              FadeAnimatedText('Frutas'),
-                              FadeAnimatedText('Verduras'),
-                              FadeAnimatedText('Legumes'),
-                              FadeAnimatedText('Carnes'),
-                              FadeAnimatedText('Cereais'),
-                              FadeAnimatedText('Laticínios'),
-                            ]),
+                          isRepeatingAnimation: true,
+                          repeatForever: true,
+                          pause: Duration.zero,
+                          animatedTexts: [
+                            FadeAnimatedText('Frutas'),
+                            FadeAnimatedText('Verduras'),
+                            FadeAnimatedText('Legumes'),
+                            FadeAnimatedText('Carnes'),
+                            FadeAnimatedText('Cereais'),
+                            FadeAnimatedText('Laticínios'),
+                          ],
+                        ),
                       ),
                     )
                   ],
@@ -162,7 +163,18 @@ class SignInScreen extends StatelessWidget {
                           alignment: Alignment.centerRight,
                           child: TextButton(
                             onPressed: () async {
-                              await resetPassword(context);
+                              final bool? result = await showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return ForgotPasswordDialog(
+                                      email: loginController.text);
+                                },
+                              );
+
+                              if (result ?? false) {
+                                utilsServices.showToast(
+                                    msg: 'Email de recuperação enviado');
+                              }
                             },
                             child: Text(
                               'Esqueceu a senha?',
@@ -229,117 +241,6 @@ class SignInScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Future<bool?> resetPassword(BuildContext context) {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Stack(
-              children: [
-                Form(
-                  key: _dialogFormKey,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // Título
-                        const Padding(
-                          padding: EdgeInsets.only(top: 12),
-                          child: Center(
-                            child: Text(
-                              'Recuperação de senha',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        // Texto de hint
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          child: Center(
-                            child: Text(
-                              'Digite o email para recuperar a senha',
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-                        // Campo de email
-                        CustomTextField(
-                          text: 'Email',
-                          controller: passwwordResetController,
-                          validator: emailValidator,
-                          icon: Icons.email,
-                        ),
-                        // Botão Recuperar
-                        SizedBox(
-                          height: 45,
-                          child: GetX<AuthController>(
-                            builder: (authController) {
-                              return ElevatedButton(
-                                onPressed: !authController.isLoadingDialog.value
-                                    ? () async {
-                                        FocusScope.of(context).unfocus();
-
-                                        if (_dialogFormKey.currentState!
-                                            .validate()) {
-                                          await authController.resetPassword(
-                                              email: passwwordResetController
-                                                  .text);
-                                        }
-                                      }
-                                    : null,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                ),
-                                child: !authController.isLoadingDialog.value
-                                    ? const Text(
-                                        'Recuperar',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                        ),
-                                      )
-                                    : const CircularProgressIndicator(),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 5,
-                  right: 5,
-                  child: IconButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    icon: const Icon(
-                      Icons.close,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ],
-            ));
-      },
     );
   }
 }
