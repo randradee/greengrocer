@@ -1,6 +1,8 @@
 import 'package:add_to_cart_animation/add_to_cart_animation.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:greengrocer/src/config/custom_colors.dart';
+import 'package:greengrocer/src/controllers/home_controller.dart';
 import 'package:greengrocer/src/pages/home/components/category_tile.dart';
 import 'package:greengrocer/src/config/app_data.dart' as app_data;
 import 'package:greengrocer/src/pages/home/components/item_tile.dart';
@@ -15,7 +17,7 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  String selectedCategory = 'Frutas';
+  String selectedCategory = 'Cereais';
 
   var globalKeyCartItems = GlobalKey<CartIconKey>();
   late Function(GlobalKey) runAddToCartAnimation;
@@ -24,18 +26,7 @@ class _HomeTabState extends State<HomeTab> {
     runAddToCartAnimation(gkImage);
   }
 
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-
-    Future.delayed(const Duration(seconds: 3), () {
-      setState(() {
-        isLoading = false;
-      });
-    });
-  }
+  final _homeController = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -104,21 +95,22 @@ class _HomeTabState extends State<HomeTab> {
             Container(
               padding: const EdgeInsets.only(left: 25),
               height: 40,
-              child: !isLoading
+              child: !_homeController.isLoading.value
                   ? ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (_, index) => CategoryTile(
                         onPressed: () {
                           setState(() {
-                            selectedCategory = app_data.categories[index];
+                            selectedCategory =
+                                _homeController.categories[index].title;
                           });
                         },
-                        category: app_data.categories[index],
-                        isSelected:
-                            app_data.categories[index] == selectedCategory,
+                        category: _homeController.categories[index].title,
+                        isSelected: _homeController.categories[index].title ==
+                            selectedCategory,
                       ),
                       separatorBuilder: (_, index) => const SizedBox(width: 10),
-                      itemCount: app_data.categories.length,
+                      itemCount: _homeController.categories.length,
                     )
                   : ListView(
                       scrollDirection: Axis.horizontal,
@@ -133,12 +125,13 @@ class _HomeTabState extends State<HomeTab> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
-                      )),
+                      ),
+                    ),
             ),
 
             // Grid
             Expanded(
-              child: !isLoading
+              child: !_homeController.isLoading.value
                   ? GridView.builder(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                       physics: const BouncingScrollPhysics(),
