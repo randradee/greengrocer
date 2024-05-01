@@ -17,8 +17,6 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  String selectedCategory = 'Cereais';
-
   var globalKeyCartItems = GlobalKey<CartIconKey>();
   late Function(GlobalKey) runAddToCartAnimation;
 
@@ -26,7 +24,7 @@ class _HomeTabState extends State<HomeTab> {
     runAddToCartAnimation(gkImage);
   }
 
-  final _homeController = Get.find<HomeController>();
+  final homeController = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -92,46 +90,49 @@ class _HomeTabState extends State<HomeTab> {
             ),
 
             // Filtro de categorias
-            Container(
-              padding: const EdgeInsets.only(left: 25),
-              height: 40,
-              child: !_homeController.isLoading.value
-                  ? ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (_, index) => CategoryTile(
-                        onPressed: () {
-                          setState(() {
-                            selectedCategory =
-                                _homeController.categories[index].title;
-                          });
-                        },
-                        category: _homeController.categories[index].title,
-                        isSelected: _homeController.categories[index].title ==
-                            selectedCategory,
-                      ),
-                      separatorBuilder: (_, index) => const SizedBox(width: 10),
-                      itemCount: _homeController.categories.length,
-                    )
-                  : ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: List.generate(
-                        10,
-                        (index) => Container(
-                          margin: const EdgeInsets.only(right: 12),
-                          alignment: Alignment.center,
-                          child: CustomShimmer(
-                            height: 20,
-                            width: 80,
-                            borderRadius: BorderRadius.circular(20),
+            GetBuilder<HomeController>(
+              builder: (homeController) {
+                return Container(
+                  padding: const EdgeInsets.only(left: 25),
+                  height: 40,
+                  child: !homeController.isLoading
+                      ? ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (_, index) => CategoryTile(
+                            onPressed: () {
+                              homeController.selectCategory(
+                                  homeController.categories[index]);
+                            },
+                            category: homeController.categories[index].title,
+                            isSelected: homeController.categories[index] ==
+                                homeController.currentCategory,
+                          ),
+                          separatorBuilder: (_, index) =>
+                              const SizedBox(width: 10),
+                          itemCount: homeController.categories.length,
+                        )
+                      : ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: List.generate(
+                            10,
+                            (index) => Container(
+                              margin: const EdgeInsets.only(right: 12),
+                              alignment: Alignment.center,
+                              child: CustomShimmer(
+                                height: 20,
+                                width: 80,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
+                );
+              },
             ),
 
             // Grid
             Expanded(
-              child: !_homeController.isLoading.value
+              child: !homeController.isLoading
                   ? GridView.builder(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                       physics: const BouncingScrollPhysics(),
@@ -166,7 +167,7 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                       ),
                     ),
-            )
+            ),
           ],
         ),
       ),

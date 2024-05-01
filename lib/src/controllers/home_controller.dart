@@ -8,27 +8,40 @@ class HomeController extends GetxController {
   final _homeRepository = HomeRepository();
   final _utilsServices = UtilsServices();
 
-  RxBool isLoading = false.obs;
+  bool isLoading = false;
 
   List<CategoryModel> categories = [];
+  CategoryModel? currentCategory;
 
   @override
-  onInit() {
+  void onInit() {
     super.onInit();
 
     getCategories();
   }
 
+  setLoading(bool value) {
+    isLoading = value;
+    update();
+  }
+
+  void selectCategory(CategoryModel category) {
+    currentCategory = category;
+    update();
+  }
+
   Future<void> getCategories() async {
-    isLoading.value = true;
+    setLoading(true);
     HomeResult<CategoryModel> result = await _homeRepository.getCategories();
-    isLoading.value = false;
+    setLoading(false);
 
     result.when(
       success: (data) {
         categories.assignAll(data);
 
-        print(categories);
+        if (categories.isEmpty) return;
+
+        selectCategory(categories.first);
       },
       error: (message) {
         _utilsServices.showToast(
