@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:greengrocer/src/config/custom_colors.dart';
 import 'package:greengrocer/src/controllers/home_controller.dart';
 import 'package:greengrocer/src/pages/home/components/category_tile.dart';
-import 'package:greengrocer/src/config/app_data.dart' as app_data;
 import 'package:greengrocer/src/pages/home/components/item_tile.dart';
 import 'package:greengrocer/src/pages/shared/app_name_widget.dart';
 import 'package:greengrocer/src/pages/shared/custom_shimmer.dart';
@@ -130,44 +129,53 @@ class _HomeTabState extends State<HomeTab> {
               },
             ),
 
-            // Grid
-            Expanded(
-              child: !homeController.isLoading
-                  ? GridView.builder(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      physics: const BouncingScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
+            // Grid de produtos
+            GetBuilder<HomeController>(builder: (homeController) {
+              return Expanded(
+                child: !homeController.isLoading
+                    ? GridView.builder(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                        physics: const BouncingScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 9 / 11.5,
+                        ),
+                        itemCount: homeController.currentCategory!.items.length,
+                        itemBuilder: (_, index) {
+                          if (((index + 1) ==
+                                  homeController
+                                      .currentCategory!.items.length) &&
+                              !homeController.isLastPage) {
+                            homeController.loadMoreProducts();
+                          }
+
+                          return ItemTile(
+                            item: homeController.currentCategory!.items[index],
+                            cartAnimationMethod: itemSelectedCartAnimations,
+                          );
+                        },
+                      )
+                    : GridView.count(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                        physics: const BouncingScrollPhysics(),
                         crossAxisCount: 2,
                         mainAxisSpacing: 10,
                         crossAxisSpacing: 10,
                         childAspectRatio: 9 / 11.5,
-                      ),
-                      itemCount: app_data.items.length,
-                      itemBuilder: (_, index) {
-                        return ItemTile(
-                          item: app_data.items[index],
-                          cartAnimationMethod: itemSelectedCartAnimations,
-                        );
-                      },
-                    )
-                  : GridView.count(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      physics: const BouncingScrollPhysics(),
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
-                      childAspectRatio: 9 / 11.5,
-                      children: List.generate(
-                        10,
-                        (index) => CustomShimmer(
-                          height: double.maxFinite,
-                          width: double.maxFinite,
-                          borderRadius: BorderRadius.circular(20),
+                        children: List.generate(
+                          10,
+                          (index) => CustomShimmer(
+                            height: double.maxFinite,
+                            width: double.maxFinite,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                         ),
                       ),
-                    ),
-            ),
+              );
+            })
           ],
         ),
       ),

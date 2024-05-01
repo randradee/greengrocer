@@ -1,16 +1,21 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:json_annotation/json_annotation.dart';
 
 part 'item_model.g.dart';
 
 @JsonSerializable()
 class ItemModel {
+  String id;
+  @JsonKey(name: 'title')
   String itemName;
+  @JsonKey(name: 'picture')
   String imgUrl;
   String unit;
   double price;
   String description;
 
   ItemModel({
+    this.id = '',
     required this.itemName,
     required this.imgUrl,
     required this.unit,
@@ -22,4 +27,9 @@ class ItemModel {
       _$ItemModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ItemModelToJson(this);
+
+  @override
+  String toString() {
+    return 'ItemModel(itemName: $itemName, imgUrl: $imgUrl, unit: $unit, price: $price, description: $description)';
+  }
 }

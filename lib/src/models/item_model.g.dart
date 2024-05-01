@@ -7,16 +7,18 @@ part of 'item_model.dart';
 // **************************************************************************
 
 ItemModel _$ItemModelFromJson(Map<String, dynamic> json) => ItemModel(
-      itemName: json['itemName'] as String,
-      imgUrl: json['imgUrl'] as String,
+      id: json['id'] as String? ?? '',
+      itemName: json['title'] as String,
+      imgUrl: json['picture'] as String,
       unit: json['unit'] as String,
       price: (json['price'] as num).toDouble(),
       description: json['description'] as String,
     );
 
 Map<String, dynamic> _$ItemModelToJson(ItemModel instance) => <String, dynamic>{
-      'itemName': instance.itemName,
-      'imgUrl': instance.imgUrl,
+      'id': instance.id,
+      'title': instance.itemName,
+      'picture': instance.imgUrl,
       'unit': instance.unit,
       'price': instance.price,
       'description': instance.description,
