@@ -13,6 +13,7 @@ class HomeController extends GetxController {
 
   bool isLoading = false;
   bool isLoadingProducts = false;
+  RxString searchTitle = ''.obs;
 
   List<CategoryModel> categories = [];
   CategoryModel? currentCategory;
@@ -27,6 +28,12 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    debounce(
+      searchTitle,
+      (_) => filterByTitle(),
+      time: const Duration(milliseconds: 600),
+    );
 
     getCategories();
   }
@@ -46,6 +53,42 @@ class HomeController extends GetxController {
     update();
 
     if (currentCategory!.items.isNotEmpty) return;
+
+    getProducts();
+  }
+
+  void filterByTitle() {
+    // Remover todos os produtos das categorias
+    for (CategoryModel category in categories) {
+      category.items.clear();
+      category.pagination = 0;
+    }
+
+    if (searchTitle.value.isEmpty) {
+      categories.removeAt(0);
+    } else {
+      CategoryModel? c =
+          categories.firstWhereOrNull((element) => element.id == '');
+
+      if (c == null) {
+        // Criar uma nova categoria com todos os produtos
+        final allProductsCategory = CategoryModel(
+          title: 'Todos',
+          id: '',
+          items: [],
+          pagination: 0,
+        );
+
+        categories.insert(0, allProductsCategory);
+      } else {
+        c.items.clear();
+        c.pagination = 0;
+      }
+    }
+
+    currentCategory = categories.first;
+
+    update();
 
     getProducts();
   }
@@ -80,6 +123,14 @@ class HomeController extends GetxController {
       'categoryId': currentCategory!.id,
       "itemsPerPage": itemsPerPage
     };
+
+    if (searchTitle.value.isNotEmpty) {
+      body['title'] = searchTitle.value;
+
+      if (currentCategory!.title == 'Todos') {
+        body.remove('categoryId');
+      }
+    }
 
     HomeResult<ItemModel> result =
         await _homeRepository.getProducts(body: body);
